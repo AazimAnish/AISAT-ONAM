@@ -1,3 +1,5 @@
+"use client";
+
 import { db } from "@/app/firebase/firebaseConfig";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { ToastAction } from "@/components/ui/toast";

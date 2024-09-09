@@ -20,9 +20,9 @@ import { Button } from "@/components/ui/button"
 
 const Register = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
+    <div className="h-screen w-screen flex justify-center items-center">
 
-      <Card>
+      <Card className="max-w-md w-full p-4 mx-4 space-y-4">
         <CardHeader>
           <CardTitle>Registration Form</CardTitle>
           <CardDescription>
@@ -108,6 +108,7 @@ const Register = () => {
 
           <div className="my-4">
             <Button
+            className="w-full py-2 px-4 flex items-center justify-center"
               type="submit"
             // disabled={}
             >
