@@ -9,7 +9,7 @@ import { auth, provider, signInWithPopup, db } from './firebase/firebaseConfig';
 import { useRouter } from 'next/navigation';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useToast } from "@/components/ui/use-toast";
-import ToastActionButton from '../components/toastButton'; // Import the custom button
+import ToastActionButton from '../components/layout/toastButton'; // Import the custom button
 import LoadingSpinner from './loading'; // Import the loading spinner component
 
 // Utility functions for encoding/decoding
