@@ -121,7 +121,7 @@ const Page = () => {
     <div className="h-screen w-screen flex justify-center items-center">
       {isLoading && <LoadingSpinner />}
       {!isLoading && (
-        <Card className="max-w-md w-full p-4 mx-4 space-y-4">
+        <Card className="max-w-md w-full p-4 mx-4 space-y-4 rounded-lg border-4 border-white shadow-lg shadow-yellow-300">
           <CardHeader>
             <CardTitle>Sadhya-Fi</CardTitle>
             <CardDescription>Login to Sadhya-Fi</CardDescription>
