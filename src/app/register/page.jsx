@@ -78,10 +78,10 @@ const Page = ({ email }) => {
   };
 
   const [departmentOptions, setDepartmentOptions] = useState([
-    { value: 'CS', label: 'CS' },
+    { value: 'CSE', label: 'CSE' },
     { value: 'ME', label: 'ME' },
-    { value: 'EE', label: 'EE' },
-    { value: 'EC', label: 'EC' },
+    { value: 'EEE', label: 'EEE' },
+    { value: 'ECE', label: 'ECE' },
     { value: 'CE', label: 'CE' },
   ]);
 
@@ -95,16 +95,16 @@ const Page = ({ email }) => {
             { value: 'CSE-A', label: 'CSE-A' },
             { value: 'CSE-B', label: 'CSE-B' },
             { value: 'ME', label: 'ME' },
-            { value: 'EE', label: 'EE' },
-            { value: 'EC', label: 'EC' },
+            { value: 'EEE', label: 'EEE' },
+            { value: 'ECE', label: 'ECE' },
             { value: 'CE', label: 'CE' },
           ]);
         } else {
           setDepartmentOptions([
-            { value: 'CS', label: 'CS' },
+            { value: 'CSE', label: 'CSE' },
             { value: 'ME', label: 'ME' },
-            { value: 'EE', label: 'EE' },
-            { value: 'EC', label: 'EC' },
+            { value: 'EEE', label: 'EEE' },
+            { value: 'ECE', label: 'ECE' },
             { value: 'CE', label: 'CE' },
           ]);
           if (prevData.branch === 'CSE-A' || prevData.branch === 'CSE-B') {
