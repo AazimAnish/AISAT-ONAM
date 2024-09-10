@@ -57,12 +57,12 @@ const AdminScanner = () => {
     try {
       const Query = query(
         collection(db, hostelName),
-        where("tokennumber", "==", parseInt(tokennumber))
+        where("tokenNumber", "==", parseInt(tokenNumber))
       );
       const Snapshot = await getDocs(Query);
       Snapshot.forEach((doc) => {
         const docData = doc.data();
-        picUrl = docData.picUrl;
+
         name = docData.name;
       });
 
