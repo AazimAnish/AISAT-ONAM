@@ -6,11 +6,14 @@ import Link from 'next/link';
 import Img from "../../public/images/Img.webp";
 
 const Page = () => {
+  // Assuming you want to use isLoading state
+  const [isLoading, setIsLoading] = React.useState(false);
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
-      {isLoading && <LoadingSpinner />}
-      {!isLoading && (
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
         <Card className="max-w-md w-full p-4 mx-4 space-y-4 rounded-lg border-4 border-white shadow-lg shadow-yellow-300">
           <CardHeader>
             <CardTitle>Sadhya-Fi</CardTitle>
@@ -19,7 +22,7 @@ const Page = () => {
           <CardContent>
             <Button
               className="py-2 px-4 flex items-center justify-center w-full mb-4"
-              // onClick={}
+              // onClick={handleGoogleLogin} // Uncomment and implement this function when ready
             >
               <Image
                 src={Img}
@@ -33,11 +36,11 @@ const Page = () => {
               <span className="ml-1">Click here to</span>
               <Link href="/register" className="ml-1 text-blue-500">
                 Signup
-              </Link>{' '}
-              
+              </Link>
             </p>
           </CardContent>
         </Card>
+      )}
     </div>
   );
 };
