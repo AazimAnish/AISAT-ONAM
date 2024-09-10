@@ -10,6 +10,7 @@ import {
   collection,
   doc,
   getDocs,
+  increment,
   query,
   updateDoc,
   where,
@@ -18,7 +19,7 @@ import { useState } from "react";
 
 const AdminScanner = () => {
   const { toast } = useToast();
-
+  const [messNumber, setMessNumber] = useState("");
   const [result, setResult] = useState("");
   const [bg, setBg] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -26,65 +27,53 @@ const AdminScanner = () => {
   const [lastFiveScans, setLastFiveScans] = useState([]);
 
   let name = "";
-  let tokennumber = "";
+  let hostelName = "paid";
 
-  //   const updateCount = async () => {
-  //     try {
-  //       const hostelQuery = query(
-  //         collection(db, "Hostels"),
-  //         where("name", "==", hostelName)
-  //       );
-  //       const hostelSnapshot = await getDocs(hostelQuery);
-
-  //       if (!hostelSnapshot.empty) {
-  //         const hostelDoc = hostelSnapshot.docs[0];
-  //         const hostelDocRef = doc(db, "Hostels", hostelDoc.id);
-
-  //         await updateDoc(hostelDocRef, {
-  //           attendanceCount: increment(1),
-  //         });
-
-  //         console.log("Attendance count updated successfully!");
-  //       } else {
-  //         console.log("No matching hostel found.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error updating attendance count:", error);
-  //     }
-  //   };
-
-  const handleScan = async () => {
+  const updateAttendanceCount = async () => {
     try {
-      const Query = query(
-        collection(db, hostelName),
-        where("tokenNumber", "==", parseInt(tokenNumber))
-      );
-      const Snapshot = await getDocs(Query);
-      Snapshot.forEach((doc) => {
-        const docData = doc.data();
-
-        name = docData.name;
-      });
-
-      toast({
-        title: (
-          <div>
-            <p className="font-bold">Name: {name}</p>
-            <p className="font-bold">Roll number: {messNumber}</p>
-          </div>
-        ),
-        action: (
-          <ToastAction
-            altText="Mark Attendance"
-            className="bg-black text-white"
-            onClick={() => markAttendance()}
-          >
-            Mark Token
-          </ToastAction>
-        ),
+      const countDocRef = doc(db, "count", "Q4006zimmJlyhIm7wNYv");
+      await updateDoc(countDocRef, {
+        attendanceCount: increment(1),
       });
     } catch (error) {
-      console.error("Error fetching picUrl:", error);
+      console.error("Error incrementing attendance count:", error);
+    }
+  };
+
+  const handleScan = async () => {
+    if (messNumber && hostelName) {
+      try {
+        const Query = query(
+          collection(db, hostelName),
+          where("tokenNumber", "==", parseInt(messNumber))
+        );
+        const Snapshot = await getDocs(Query);
+        Snapshot.forEach((doc) => {
+          const docData = doc.data();
+
+          name = docData.name;
+        });
+
+        toast({
+          description: (
+            <div>
+              <p className="font-bold">Name: {name}</p>
+              <p className="font-bold">Mess number: {messNumber}</p>
+            </div>
+          ),
+          action: (
+            <ToastAction
+              altText="Mark Attendance"
+              className="bg-black text-white"
+              onClick={() => markAttendance()}
+            >
+              Mark Token
+            </ToastAction>
+          ),
+        });
+      } catch (error) {
+        console.error("Error fetching picUrl:", error);
+      }
     }
   };
 
@@ -98,37 +87,30 @@ const AdminScanner = () => {
 
       const Query = query(
         collection(db, hostelName),
-        where("tokennumber", "==", parseInt(tokennumber))
+        where("tokenNumber", "==", parseInt(messNumber))
       );
       const Snapshot = await getDocs(Query);
       Snapshot.forEach((doc) => {
         const data = doc.data();
         docId = doc.id;
-        food = data.mon;
+        food = data.food;
       });
 
-      if (docId) {
-        if (food) {
-          setBg("destructive");
-          setResult("Rejected");
-        } else {
-          setBg("success");
-          setResult("Accepted");
-          setLastFiveScans((prevScans) => {
-            const updatedScans = [
-              { messNumber: messNumber, name },
-              ...prevScans,
-            ];
-            return updatedScans.slice(0, 3);
-          });
-          await updateDoc(doc(db, hostelName, docId), {
-            food: true,
-          });
-          updateAttendanceCount();
-        }
-      } else {
+      if (food) {
         setBg("destructive");
-        setResult("Data not found");
+        setResult("Rejected");
+      } else {
+        setBg("success");
+        setResult("Accepted");
+
+        setLastFiveScans((prevScans) => {
+          const updatedScans = [{ messNumber: messNumber, name }, ...prevScans];
+          return updatedScans.slice(0, 3);
+        });
+        await updateDoc(doc(db, hostelName, docId), {
+          food: true,
+        });
+        updateAttendanceCount();
       }
     } catch (error) {
       setBg("destructive");
@@ -153,7 +135,7 @@ const AdminScanner = () => {
       </div>
 
       <div className="flex items-center mb-5 mt-20">
-        <span className="mr-2">Token number: </span>
+        <span className="mr-2">Mess number: </span>
         <Input
           className="w-20"
           type="number"
@@ -163,7 +145,7 @@ const AdminScanner = () => {
       </div>
 
       <Button type="button" onClick={handleScan} className="mb-22">
-        Search using token number
+        Search using mess number
       </Button>
 
       <div className="w-full md:w-1/2 max-w-lg mt-12">
