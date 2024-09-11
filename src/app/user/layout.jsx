@@ -9,7 +9,7 @@ export default function UserLayout({
     return (
         <section className="h-screen w-full relative">
             {children}
-            <Dock magnification={75} distance={100} direction="middle" className="absolute inset-x-0 bottom-8 z-10">
+            <Dock magnification={75} distance={100} direction="middle" className="absolute inset-x-0 bottom-8 bg-white/25 backdrop-blur-md border border-white/20 shadow-xl rounded-xl overflow-hidden z-40">
                 <DockIcon>
                     <CgProfile className="size-6" />
                 </DockIcon>
