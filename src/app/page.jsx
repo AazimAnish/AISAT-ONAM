@@ -102,7 +102,7 @@ const Page = () => {
               router.push("/notpaid");
             }
           })
-          .catch((error) => {});
+          .catch((error) => { });
       } else {
         setIsLoading(false);
       }
