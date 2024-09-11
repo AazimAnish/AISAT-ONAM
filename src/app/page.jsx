@@ -142,7 +142,7 @@ const Page = () => {
               Not a User? <span className="ml-1">Click here to</span>
               <Link href="/register" className="ml-1 text-blue-500">
                 Signup
-              </Link>{" "}
+              </Link>{''}
             </p>
           </CardContent>
         </Card>
