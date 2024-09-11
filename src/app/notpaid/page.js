@@ -20,7 +20,7 @@ const Verify = () => {
         />
       </a>
     </div>
-        <p className=" pt-1 text-md font-bold">പൈസ കൊടുക്ക് എന്നിട്ട കഴിക്കാം</p>
+        <p className=" pt-1 text-md font-bold"> "പൈസ കൊടുക്ക് എന്നിട്ട കഴിക്കാം ; </p>
         <p className="text-lg font-bold">Payment Not Done </p>
       </Card>
       
