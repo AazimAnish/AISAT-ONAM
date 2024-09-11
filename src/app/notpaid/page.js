@@ -1,3 +1,4 @@
+"use client"
 import { Card } from '@/components/ui/card';
 import { ImCross } from "react-icons/im";
 import Image from 'next/image';
@@ -22,6 +23,7 @@ const Verify = () => {
         <p className=" pt-1 text-md font-bold">പൈസ കൊടുക്ക് എന്നിട്ട കഴിക്കാം</p>
         <p className="text-lg font-bold">Payment Not Done </p>
       </Card>
+      
     </div>
   );
 };

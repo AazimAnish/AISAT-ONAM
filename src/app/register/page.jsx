@@ -11,6 +11,7 @@ import { auth, provider, signInWithPopup, db } from '../firebase/firebaseConfig'
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { useToast } from "@/components/ui/use-toast";
 
+
 const Page = ({ email }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -79,10 +80,10 @@ const Page = ({ email }) => {
 
   const [departmentOptions, setDepartmentOptions] = useState([
     { value: 'CSE', label: 'CSE' },
-    { value: 'ME', label: 'ME' },
+    { value: 'ME', label: 'ME'   },
     { value: 'EEE', label: 'EEE' },
     { value: 'ECE', label: 'ECE' },
-    { value: 'CE', label: 'CE' },
+    { value: 'CE', label: 'CE'   },
   ]);
 
   const handleSelectChange = (id, value) => {

@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Img from "../../public/images/Img.webp";
+import ToastActionButton from "../components/toastButton"; // Import the custom button
 import { auth, db, provider, signInWithPopup } from "./firebase/firebaseConfig";
 import LoadingSpinner from "./loading";
 
