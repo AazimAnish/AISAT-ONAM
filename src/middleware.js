@@ -38,10 +38,10 @@ export function middleware(request) {
             console.log("Decoded Data: ", user);
 
             const userPaths = ["/user , /user/schedule"];
-            const superadminPaths = ["/superadmin",];
+            const superadminPaths = ["/superadmin"];
             const adminPaths = ["/scanner"];
             
-            if (user.role === 'auth' ) {
+            if (user.role === 'auth' && pathname !=="/user") {
                 if (!userPaths.includes(pathname)) {
                     console.log("User is authenticated but trying to access a restricted path, redirecting to /user");
                     return NextResponse.redirect(`${fullUrl.origin}/user`);

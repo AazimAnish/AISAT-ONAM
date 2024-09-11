@@ -11,6 +11,8 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import Img from "../../public/images/Img.webp";
 import LoadingSpinner from './loading';
 import { useToast } from "@/components/ui/use-toast";
+import ToastActionButton from '../components/toastButton'; // Import the custom button
+
 
 
 
@@ -31,7 +33,8 @@ const Page = () => {
         if (!querySnapshot.empty) {
           const userDoc = querySnapshot.docs[0].data();
           const role = userDoc.role;
-          return { role };
+          const email = userDoc.email;
+          return { role , email  };
         } else {
           const dismissToast = toast({
             variant: "destructive",
@@ -64,8 +67,9 @@ const Page = () => {
   
       if (userDetails) {
         const {role} = userDetails;
+        const {email} = userDetails;
   
-        const sys_bio = { role };
+        const sys_bio = { role ,email  };
         const encodedToken = encodeBase64(JSON.stringify(sys_bio));
         localStorage.setItem('sys_bio', encodedToken);
   
