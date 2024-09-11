@@ -58,7 +58,7 @@ const AdminScanner = () => {
           description: (
             <div>
               <p className="font-bold">Name: {name}</p>
-              <p className="font-bold">Mess number: {messNumber}</p>
+              <p className="font-bold">Token number: {messNumber}</p>
             </div>
           ),
           action: (
@@ -135,7 +135,7 @@ const AdminScanner = () => {
       </div>
 
       <div className="flex items-center mb-5 mt-20">
-        <span className="mr-2">Mess number: </span>
+        <span className="mr-2">Token number: </span>
         <Input
           className="w-20"
           type="number"
@@ -145,7 +145,7 @@ const AdminScanner = () => {
       </div>
 
       <Button type="button" onClick={handleScan} className="mb-22">
-        Search using mess number
+        Search using token number
       </Button>
 
       <div className="w-full md:w-1/2 max-w-lg mt-12">
@@ -160,7 +160,7 @@ const AdminScanner = () => {
                 className="bg-white shadow-lg rounded-lg p-3 w-28 h-32 flex flex-col space-y-1 border border-gray-200 text-center"
               >
                 <p className="text-sm text-gray-600">
-                  <strong>Mess no:</strong> {scan.messNumber}
+                  <strong>Token no:</strong> {scan.messNumber}
                 </p>
                 <p className="text-sm text-gray-600">
                   <strong>Name:</strong> {scan.name}
