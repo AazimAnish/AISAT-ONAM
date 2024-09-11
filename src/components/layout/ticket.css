@@ -1,6 +1,6 @@
 :root {
     --bg: #111316;
-    --logopng: url(../../../public/sadya-fi.png);
+    --logopng: url(../../../public/dollar.png);
     --ticket: url(../../../public/ticketShape.svg);
     --ar: 20/30;
     --gutter: 8%;
@@ -26,11 +26,9 @@
 .back {
     grid-area: 1/1;
     background-color: #6e6176;
-    background-image: radial-gradient(
-        circle at var(--p) 50%,
-        #fff 10%,
-        transparent 100%
-    );
+    background-image: radial-gradient(circle at var(--p) 50%,
+            #fff 10%,
+            transparent 100%);
     background-size: 100% 220vh;
     background-position: center;
     background-repeat: no-repeat;
@@ -43,6 +41,7 @@
     mask-size: cover;
     mask-repeat: no-repeat;
 }
+
 .cutout {
     position: absolute;
 }
@@ -52,12 +51,10 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(
-        -70deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.5) 40.5%,
-        transparent
-    );
+    background-image: linear-gradient(-70deg,
+            transparent 40%,
+            rgba(255, 255, 255, 0.5) 40.5%,
+            transparent);
     background-size: 200% 200%;
     background-position: var(--p) var(--p);
     z-index: 5;
@@ -86,18 +83,16 @@
     --blue: hsl(222, 100%, 50%);
     --purple: hsl(258, 100%, 50%);
     --magenta: hsl(300, 100%, 50%);
-    background-image: repeating-linear-gradient(
-        -45deg,
-        var(--red) 0%,
-        var(--orange) calc(var(--space) * 1),
-        var(--yellow) calc(var(--space) * 2),
-        var(--green) calc(var(--space) * 3),
-        var(--cyan) calc(var(--space) * 4),
-        var(--blue) calc(var(--space) * 5),
-        var(--purple) calc(var(--space) * 6),
-        var(--magenta) calc(var(--space) * 7),
-        var(--red) calc(var(--space) * 8)
-    );
+    background-image: repeating-linear-gradient(-45deg,
+            var(--red) 0%,
+            var(--orange) calc(var(--space) * 1),
+            var(--yellow) calc(var(--space) * 2),
+            var(--green) calc(var(--space) * 3),
+            var(--cyan) calc(var(--space) * 4),
+            var(--blue) calc(var(--space) * 5),
+            var(--purple) calc(var(--space) * 6),
+            var(--magenta) calc(var(--space) * 7),
+            var(--red) calc(var(--space) * 8));
     background-size: 150vw 150vh;
     background-position: calc(var(--h)) calc(var(--h));
     background-repeat: no-repeat;
@@ -152,8 +147,9 @@ p {
 [contenteditable] {
     outline: none;
 }
+
 [contenteditable]:focus {
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
 }
 
@@ -175,13 +171,11 @@ p {
     height: 18%;
     padding: 0 var(--gutter);
 
-    background-image: repeating-linear-gradient(
-            90deg,
+    background-image: repeating-linear-gradient(90deg,
             #fff0 0px,
             #fff0 8px,
             #0005 8px,
-            #0005 16px
-        ),
+            #0005 16px),
         radial-gradient(ellipse at center center, #fff0 10%, transparent 50%);
     background-size: 100% 1.5px, 250% 1.5px;
     background-repeat: no-repeat;
@@ -213,6 +207,7 @@ p {
     width: 18px;
     margin-left: 5px;
 }
+
 .usernum {
     font-size: 20px;
 }

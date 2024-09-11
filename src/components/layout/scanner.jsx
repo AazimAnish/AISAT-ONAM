@@ -28,7 +28,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
 
   const { toast } = useToast();
 
-  const hostelName = "paid"; // Default hostel name
+  const hostelName = "paid";
   let name = "";
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
           description: (
             <div>
               <p className="font-bold">Name: {name}</p>
-              <p className="font-bold">Mess number: {messNumber}</p>
+              <p className="font-bold">Token number: {messNumber}</p>
             </div>
           ),
           action: (
@@ -122,7 +122,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
               className="bg-black text-white"
               onClick={() => markAttendance(messNumber)}
             >
-              Mark Attendance
+              Mark Token
             </ToastAction>
           ),
         });
@@ -202,6 +202,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
           onResult={handleScan}
           className="w-full h-auto"
           constraints={{
+            // facingMode: { exact: "environment" },
             advanced: [{ zoom: 2.0 }],
           }}
         />

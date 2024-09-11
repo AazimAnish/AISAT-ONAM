@@ -37,24 +37,24 @@ export function middleware(request) {
             const user = JSON.parse(data);
             console.log("Decoded Data: ", user);
 
-            const userPaths = ["/user , /user/schedule"];
-            const superadminPaths = ["/superadmin",];
+            const userPaths = ["/user", "/user/schedule"];
+            const superadminPaths = ["/superadmin"];
             const adminPaths = ["/scanner"];
-            
-            if (user.role === 'auth') {
+
+            if (user.role === 'auth' && pathname !== "/user") {
                 if (!userPaths.includes(pathname)) {
                     console.log("User is authenticated but trying to access a restricted path, redirecting to /user");
                     return NextResponse.redirect(`${fullUrl.origin}/user`);
                 }
             } else if (user.role === 'admin' && pathname !== "/admin") {
                 if (!adminPaths.includes(pathname)) {
-                console.log("User is an admin, redirecting to /admin");
-                return NextResponse.redirect(`${fullUrl.origin}/admin`);
+                    console.log("User is an admin, redirecting to /admin");
+                    return NextResponse.redirect(`${fullUrl.origin}/admin`);
                 }
             } else if (user.role === 'superadmin' && pathname !== "/superadmin") {
                 if (!superadminPaths.includes(pathname)) {
-                console.log("User is a superadmin, redirecting to /superadmin");
-                return NextResponse.redirect(`${fullUrl.origin}/superadmin`);
+                    console.log("User is a superadmin, redirecting to /superadmin");
+                    return NextResponse.redirect(`${fullUrl.origin}/superadmin`);
                 }
             } else if (user.role === 'unauth' && pathname !== "/notpaid") {
                 console.log("User is unauthenticated, redirecting to /notpaid");
