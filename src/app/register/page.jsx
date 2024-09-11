@@ -324,7 +324,7 @@ const Page = ({ email }) => {
           <div className="my-4">
             <Button
             className={`w-full py-2 px-4 flex items-center justify-center ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-yellow-300 hover:bg-yellow-500'
-                  } text-white`}
+                  } text-black`}
               type="submit"
              disabled={isLoading}>
               Submit

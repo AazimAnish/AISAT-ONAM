@@ -1,5 +1,3 @@
-"use client";
-
 import { db } from "@/app/firebase/firebaseConfig";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { ToastAction } from "@/components/ui/toast";
@@ -8,6 +6,7 @@ import {
   collection,
   doc,
   getDocs,
+  increment,
   onSnapshot,
   query,
   updateDoc,
@@ -16,7 +15,6 @@ import {
 import { useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 
 const QrCodeScanner = ({ setLastFiveScans }) => {
   const [result, setResult] = useState("");
@@ -30,11 +28,11 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
 
   const { toast } = useToast();
 
+  const hostelName = "paid"; // Default hostel name
   let name = "";
 
   useEffect(() => {
     fetchAttendanceCount();
-
     const unsubscribeAttendance = listenToAttendanceCount();
 
     return () => {
@@ -54,18 +52,14 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
 
   const fetchAttendanceCount = async () => {
     try {
-      const hostelQuery = query(
-        collection(db, "Hostels"),
-        where("name", "==", hostelName)
-      );
-      const hostelSnapshot = await getDocs(hostelQuery);
+      const queryRef = query(collection(db, "count"));
+      const snapshot = await getDocs(queryRef);
 
-      if (!hostelSnapshot.empty) {
-        const hostelDoc = hostelSnapshot.docs[0];
-        const data = hostelDoc.data();
-        setAttendanceCount(data.attendanceCount || 0);
+      if (!snapshot.empty) {
+        const docData = snapshot.docs[0].data();
+        setAttendanceCount(docData.attendanceCount || 0);
       } else {
-        setInitialAttendanceCount();
+        setAttendanceCount(0);
       }
     } catch (error) {
       console.error("Error fetching attendance count:", error);
@@ -73,12 +67,9 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
   };
 
   const listenToAttendanceCount = () => {
-    const hostelQuery = query(
-      collection(db, "Hostels"),
-      where("name", "==", hostelName)
-    );
+    const queryRef = query(collection(db, "count"));
 
-    const unsubscribe = onSnapshot(hostelQuery, (snapshot) => {
+    const unsubscribe = onSnapshot(queryRef, (snapshot) => {
       snapshot.forEach((doc) => {
         const data = doc.data();
         setAttendanceCount(data.attendanceCount || 0);
@@ -88,41 +79,14 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
     return unsubscribe;
   };
 
-  const setInitialAttendanceCount = async () => {
+  const updateAttendanceCount = async () => {
     try {
-      const hostelQuery = query(
-        collection(db, "Hostels"),
-        where("name", "==", hostelName)
-      );
-      const hostelSnapshot = await getDocs(hostelQuery);
-
-      if (!hostelSnapshot.empty) {
-        const hostelDoc = hostelSnapshot.docs[0];
-        await updateDoc(doc(db, "Hostels", hostelDoc.id), {
-          attendanceCount: 0,
-        });
-      }
+      const countDocRef = doc(db, "count", "Q4006zimmJlyhIm7wNYv"); // Hardcoded document ID
+      await updateDoc(countDocRef, {
+        attendanceCount: increment(1),
+      });
     } catch (error) {
-      console.error("Error setting initial attendance count:", error);
-    }
-  };
-
-  const updateAttendanceCount = async (newCount) => {
-    try {
-      const hostelQuery = query(
-        collection(db, "Hostels"),
-        where("name", "==", Hostelname)
-      );
-      const hostelSnapshot = await getDocs(hostelQuery);
-
-      if (!hostelSnapshot.empty) {
-        const hostelDoc = hostelSnapshot.docs[0];
-        await updateDoc(doc(db, "Hostels", hostelDoc.id), {
-          attendanceCount: newCount,
-        });
-      }
-    } catch (error) {
-      console.error("Error updating attendance count:", error);
+      console.error("Error incrementing attendance count:", error);
     }
   };
 
@@ -130,38 +94,42 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
     if (data && !isScanning) {
       setIsScanning(true);
       setScannedData(data.text);
-      try {
-        const Query = query(
-          collection(db, hostelName),
-          where("tokennumber", "==", parseInt(data.text))
-        );
-        const Snapshot = await getDocs(Query);
-        Snapshot.forEach((doc) => {
-          const docData = doc.data();
 
+      try {
+        const queryRef = query(
+          collection(db, hostelName),
+          where("tokenNumber", "==", parseInt(data.text)) // Ensure tokenNumber is numeric
+        );
+        const snapshot = await getDocs(queryRef);
+
+        let messNumber = data.text;
+
+        snapshot.forEach((doc) => {
+          const docData = doc.data();
           name = docData.name;
         });
 
         toast({
-          title: (
+          description: (
             <div>
               <p className="font-bold">Name: {name}</p>
-              <p className="font-bold">Mess number: {data.text}</p>
+              <p className="font-bold">Token number: {messNumber}</p>
             </div>
           ),
-
           action: (
             <ToastAction
               altText="Mark Attendance"
               className="bg-black text-white"
-              onClick={() => markAttendance(data.text)}
+              onClick={() => markAttendance(messNumber)}
             >
               Mark Token
             </ToastAction>
           ),
         });
       } catch (error) {
-        console.error("Error fetching picUrl:", error);
+        console.error("Error fetching name or token data:", error);
+      } finally {
+        setIsScanning(false);
       }
     }
   };
@@ -172,50 +140,47 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
 
     setIsLoading(true);
     setScanCount((prevCount) => prevCount + 1);
+
     try {
       let docId = null;
-
       let food = false;
 
-      const Query = query(
+      const queryRef = query(
         collection(db, hostelName),
-        where("tokennumber", "==", parseInt(scannedData))
+        where("tokenNumber", "==", parseInt(scannedData))
       );
-      const Snapshot = await getDocs(Query);
-      Snapshot.forEach((doc) => {
+      const snapshot = await getDocs(queryRef);
+
+      snapshot.forEach((doc) => {
         const data = doc.data();
         docId = doc.id;
-
         food = data.food;
       });
 
-      if (docId) {
-        if (food) {
-          setBg("destructive");
-          setResult("Rejected");
-        } else {
-          setBg("success");
-          setResult("Accepted");
-          setLastFiveScans((prevScans) => {
-            const updatedScans = [
-              { messNumber: messNumber, name },
-              ...prevScans,
-            ];
-            return updatedScans.slice(0, 3);
-          });
-          await updateDoc(doc(db, hostelName, docId), {
-            food: true,
-          });
-          incrementAttendance();
-        }
-      } else {
+      if (food) {
         setBg("destructive");
-        setResult("Data not found");
+        setResult("Rejected");
+      } else {
+        setBg("success");
+        setResult("Accepted");
+
+        setLastFiveScans((prevScans) => {
+          const updatedScans = [
+            { messNumber: scannedData, name: name },
+            ...prevScans,
+          ];
+          return updatedScans.slice(0, 3);
+        });
+
+        await updateDoc(doc(db, hostelName, docId), {
+          food: true,
+        });
+
+        updateAttendanceCount();
       }
     } catch (error) {
-      console.error("Error marking attendance:", error);
       setBg("destructive");
-      setResult("Error marking attendance");
+      setResult("Error fetching data");
     } finally {
       setIsScanning(false);
       setIsLoading(false);
@@ -226,27 +191,6 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
     console.error(err);
     setBg("destructive");
     setResult("Error scanning QR code");
-  };
-
-  const incrementAttendance = async () => {
-    try {
-      console.log("HOSTEL NAME:", Hostelname);
-      const newCount = attendanceCount + 1;
-      await updateAttendanceCount(newCount);
-      setAttendanceCount(newCount);
-    } catch (error) {
-      console.error("Error incrementing attendance count:", error);
-    }
-  };
-
-  const decrementAttendance = async () => {
-    try {
-      const newCount = Math.max(0, attendanceCount - 1);
-      await updateAttendanceCount(newCount);
-      setAttendanceCount(newCount);
-    } catch (error) {
-      console.error("Error decrementing attendance count:", error);
-    }
   };
 
   return (
@@ -270,13 +214,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
       </div>
 
       <div>
-        <Button className="mr-2" onClick={decrementAttendance}>
-          -
-        </Button>
         <Badge variant="outline">{`COUNT : ${attendanceCount}`}</Badge>
-        <Button className="ml-2" onClick={incrementAttendance}>
-          +
-        </Button>
       </div>
     </div>
   );

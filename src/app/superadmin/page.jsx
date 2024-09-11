@@ -2,32 +2,32 @@
 import { db } from "@/app/firebase/firebaseConfig"; // Import your firebase config
 import { toast } from "@/components/ui/use-toast";
 import {
+  addDoc,
   collection,
   doc,
   getDocs,
+  limit,
+  orderBy,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 const SuperAdmin = () => {
-  // State to store selected branch, year, and division
+  // State to store selected branch and year
   const [selectedBranch, setSelectedBranch] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
-  const [selectedDivision, setSelectedDivision] = useState("");
 
   // State to store students
   const [students, setStudents] = useState([]);
 
-  // List of branches, years, and divisions for filtering
-  const branches = ["CSE", "ECE", "EEE", "MECH"]; // Add more branches as needed
+  // List of branches and years for filtering
+  const branches = ["CSE-A", "CSE-B", "CSE", "ECE", "EEE", "ME"]; // Remove "CSE" since it's split into CSE-A and CSE-B
   const years = ["2", "3", "4"];
-  const divisions = ["A", "B"]; // Only for CSE Year 2
 
-  // Function to fetch unauth students based on branch, year, and division (if applicable)
-  const fetchStudents = async (branch, year, division) => {
+  // Function to fetch unauth students based on branch and year
+  const fetchStudents = async (branch, year) => {
     try {
       // Create a base query with branch and year filters
       let q = query(
@@ -36,11 +36,6 @@ const SuperAdmin = () => {
         where("branch", "==", branch),
         where("yearOfStudy", "==", year)
       );
-
-      // If CSE Year 2, add division filter
-      if (branch === "CSE" && year === "2" && division) {
-        q = query(q, where("division", "==", division));
-      }
 
       const querySnapshot = await getDocs(q);
       const filteredStudents = [];
@@ -55,26 +50,41 @@ const SuperAdmin = () => {
     }
   };
 
-  // Handle branch, year, and division selection
+  // Handle branch and year selection
   useEffect(() => {
     if (selectedBranch && selectedYear) {
-      // For CSE Year 2, wait for division selection
-      if (selectedBranch === "CSE" && selectedYear === "2") {
-        if (selectedDivision) {
-          fetchStudents(selectedBranch, selectedYear, selectedDivision);
-        }
-      } else {
-        fetchStudents(selectedBranch, selectedYear, selectedDivision);
-      }
+      fetchStudents(selectedBranch, selectedYear);
     }
-  }, [selectedBranch, selectedYear, selectedDivision]);
+  }, [selectedBranch, selectedYear]);
+
+  // Function to get the last tokenNumber and increment it by 1
+  const getNextTokenNumber = async () => {
+    try {
+      const paidQuery = query(
+        collection(db, "paid"),
+        orderBy("tokenNumber", "desc"),
+        limit(1) // Limit to get the last document
+      );
+
+      const querySnapshot = await getDocs(paidQuery);
+      if (!querySnapshot.empty) {
+        const lastDoc = querySnapshot.docs[0];
+        const lastTokenNumber = lastDoc.data().tokenNumber;
+        return lastTokenNumber + 1;
+      } else {
+        return 1; // If no document is present, start with tokenNumber 1
+      }
+    } catch (error) {
+      console.error("Error getting the last tokenNumber: ", error);
+      return 1; // Default to 1 if there's an error
+    }
+  };
 
   // Function to handle accepting a student
   const handleAccept = async (student) => {
     try {
-      // Get the number of documents in the "paid" collection to calculate the token number
-      const paidSnapshot = await getDocs(collection(db, "paid"));
-      const tokenNumber = paidSnapshot.size + 1; // Next token number
+      // Get the next token number by checking the last one in the "paid" collection
+      const tokenNumber = await getNextTokenNumber();
 
       // Update the student's role to "auth" in the "users" collection
       const userRef = doc(db, "users", student.id);
@@ -83,8 +93,7 @@ const SuperAdmin = () => {
       });
 
       // Add the student to the "paid" collection with tokenNumber
-      const paidRef = doc(db, "paid", student.id);
-      await setDoc(paidRef, {
+      await addDoc(collection(db, "paid"), {
         ...student,
         role: "auth",
         tokenNumber,
@@ -119,8 +128,7 @@ const SuperAdmin = () => {
               key={branch}
               onClick={() => {
                 setSelectedBranch(branch);
-                setSelectedYear("");
-                setSelectedDivision("");
+                setSelectedYear(""); // Reset year when branch changes
               }}
               className={`px-4 py-2 rounded-md text-white font-semibold 
               ${
@@ -143,41 +151,13 @@ const SuperAdmin = () => {
             {years.map((year) => (
               <button
                 key={year}
-                onClick={() => {
-                  setSelectedYear(year);
-                  setSelectedDivision(""); // Reset division on year change
-                }}
+                onClick={() => setSelectedYear(year)}
                 className={`px-4 py-2 rounded-md text-white font-semibold 
               ${
                 selectedYear === year ? "bg-green-600" : "bg-green-400"
               } hover:bg-green-500 transition`}
               >
                 {year}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Division Selection (only for CSE Year 2) */}
-      {selectedBranch === "CSE" && selectedYear === "2" && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">
-            Select Division
-          </h2>
-          <div className="flex flex-wrap gap-4">
-            {divisions.map((division) => (
-              <button
-                key={division}
-                onClick={() => setSelectedDivision(division)}
-                className={`px-4 py-2 rounded-md text-white font-semibold 
-              ${
-                selectedDivision === division
-                  ? "bg-purple-600"
-                  : "bg-purple-400"
-              } hover:bg-purple-500 transition`}
-              >
-                {division}
               </button>
             ))}
           </div>
@@ -196,6 +176,7 @@ const SuperAdmin = () => {
                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
                   Phone Number
                 </th>
+                <th className="px-4 py-2"></th>
               </tr>
             </thead>
             <tbody>
