@@ -28,7 +28,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
 
   const { toast } = useToast();
 
-  const hostelName = "paid"; // Default hostel name
+  const hostelName = "paid";
   let name = "";
 
   useEffect(() => {
@@ -202,7 +202,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
           onResult={handleScan}
           className="w-full h-auto"
           constraints={{
-            facingMode: { exact: "environment" },
+            // facingMode: { exact: "environment" },
             advanced: [{ zoom: 2.0 }],
           }}
         />

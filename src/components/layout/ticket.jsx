@@ -3,15 +3,17 @@
 "use client";
 
 import { gsap } from "gsap";
-import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import QRCodeGenerator from "./qrgenerator";
 import "./ticket.css";
 
 const Ticket = ({ name, phoneNumber, department, year, token }) => {
   const appRef = useRef(null);
   const ticketRef = useRef(null);
   const [isFlipped, setIsFlipped] = useState(false);
+
+  console.log("Token", token);
 
   useEffect(() => {
     if (!appRef.current || !ticketRef.current) return;
@@ -117,11 +119,7 @@ const Ticket = ({ name, phoneNumber, department, year, token }) => {
           <div className="flex flex-col items-center justify-center w-full h-full -mt-28">
             <h3 className="text-lg font-semibold">Token Number</h3>
             <p className="text-xl mb-8">{token}</p>
-            <QRCodeSVG
-              value={token}
-              size={250}
-              className="qr-code z-10 border rounded-md shadow-md"
-            />
+            <QRCodeGenerator mess_id={token} />
           </div>
           <aside className="divider absolute bottom-0 left-0 right-0 flex justify-between items-center px-4 py-2">
             <div>
