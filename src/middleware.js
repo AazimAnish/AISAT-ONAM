@@ -37,7 +37,7 @@ export function middleware(request) {
             const user = JSON.parse(data);
             console.log("Decoded Data: ", user);
 
-            const userPaths = ["/user , /user/schedule"];
+            const userPaths = ["/user" , "/user/schedule"];
             const superadminPaths = ["/superadmin"];
             const adminPaths = ["/scanner"];
             
