@@ -12,14 +12,14 @@ export async function POST(request) {
 
     const cookiesStore = cookies();
     cookiesStore.set('sys_bio', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-      });
-    
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
     return new Response(JSON.stringify({ status: 'Cookie set successfully' }), { status: 200 });
   } catch (error) {
-    
+
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
