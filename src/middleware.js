@@ -46,10 +46,10 @@ export function middleware(request) {
                     console.log("User is authenticated but trying to access a restricted path, redirecting to /user");
                     return NextResponse.redirect(`${fullUrl.origin}/user`);
                 }
-            } else if (user.role === 'admin' && pathname !== "/admin") {
+            } else if (user.role === 'admin' && pathname !== "/scanner") {
                 if (!adminPaths.includes(pathname)) {
-                    console.log("User is an admin, redirecting to /admin");
-                    return NextResponse.redirect(`${fullUrl.origin}/admin`);
+                    console.log("User is an admin, redirecting to /scanner");
+                    return NextResponse.redirect(`${fullUrl.origin}/scanner`);
                 }
             } else if (user.role === 'superadmin' && pathname !== "/superadmin") {
                 if (!superadminPaths.includes(pathname)) {
