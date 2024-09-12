@@ -16,6 +16,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+        console.log("pannda");
       try {
         const encodedToken = localStorage.getItem("sys_bio");
         if (encodedToken) {
