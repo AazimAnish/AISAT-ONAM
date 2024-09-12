@@ -163,7 +163,7 @@ const page = () => {
       content: (
         <div>
         <p className="text-neutral-800 dark:text-neutral-200 text-xs md:text-sm font-normal mb-4">
-        കേരള ശ്രീമാന്‍ മലയാളി മംഗ
+        കേരള ശ്രീമാന്‍ മലയാളി മംഗ.
         </p>
         <div className="flex justify-center">
           <div className="relative max-w-xs mx-auto p-4 bg-gray-800 bg-opacity-20 backdrop-blur-sm border border-gray-10 border-opacity-50 rounded-2xl shadow-xl">
