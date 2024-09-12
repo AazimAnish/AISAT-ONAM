@@ -23,7 +23,7 @@ const SuperAdmin = () => {
   const [students, setStudents] = useState([]);
 
   // List of branches and years for filtering
-  const branches = ["CSE-A", "CSE-B", "CSE", "ECE", "EEE", "ME"]; // Remove "CSE" since it's split into CSE-A and CSE-B
+  const branches = ["CSE-A", "CSE-B", "CSE", "ECE", "EEE", "ME", "CE"]; // Remove "CSE" since it's split into CSE-A and CSE-B
   const years = ["2", "3", "4"];
 
   // Function to fetch unauth students based on branch and year
