@@ -202,7 +202,7 @@ const QrCodeScanner = ({ setLastFiveScans }) => {
           onResult={handleScan}
           className="w-full h-auto"
           constraints={{
-            // facingMode: { exact: "environment" },
+            facingMode: { exact: "environment" },
             advanced: [{ zoom: 2.0 }],
           }}
         />
