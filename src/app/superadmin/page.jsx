@@ -26,6 +26,8 @@ const SuperAdmin = () => {
   const branches = ["CSE-A", "CSE-B", "CSE", "ECE", "EEE", "ME", "CE"]; // Remove "CSE" since it's split into CSE-A and CSE-B
   const years = ["2", "3", "4"];
 
+  console.log("hi");
+
   // Function to fetch unauth students based on branch and year
   const fetchStudents = async (branch, year) => {
     try {
@@ -131,8 +133,9 @@ const SuperAdmin = () => {
                 setSelectedYear(""); // Reset year when branch changes
               }}
               className={`px-4 py-2 rounded-md text-white font-semibold 
-              ${selectedBranch === branch ? "bg-indigo-600" : "bg-indigo-400"
-                } hover:bg-indigo-500 transition`}
+              ${
+                selectedBranch === branch ? "bg-indigo-600" : "bg-indigo-400"
+              } hover:bg-indigo-500 transition`}
             >
               {branch}
             </button>
@@ -152,8 +155,9 @@ const SuperAdmin = () => {
                 key={year}
                 onClick={() => setSelectedYear(year)}
                 className={`px-4 py-2 rounded-md text-white font-semibold 
-              ${selectedYear === year ? "bg-green-600" : "bg-green-400"
-                  } hover:bg-green-500 transition`}
+              ${
+                selectedYear === year ? "bg-green-600" : "bg-green-400"
+              } hover:bg-green-500 transition`}
               >
                 {year}
               </button>
