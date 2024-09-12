@@ -1,10 +1,10 @@
 "use client";
 
+import React, { useEffect, useState } from 'react';
+import confetti from 'canvas-confetti';
 import { db } from "@/app/firebase/firebaseConfig.js";
 import Ticket from "@/components/layout/ticket.jsx";
-import Confetti from "@/components/magicui/confetti";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import { BackgroundGradientAnimation } from "../../components/ui/background-gradient-animation.jsx";
 
 const Profile = () => {
@@ -13,7 +13,6 @@ const Profile = () => {
     const [dep, setDep] = useState("");
     const [year, setYear] = useState("");
     const [email, setEmail] = useState("");
-
     const [token, setToken] = useState("");
 
     useEffect(() => {
@@ -21,18 +20,11 @@ const Profile = () => {
             try {
                 const encodedToken = localStorage.getItem("sys_bio");
                 if (encodedToken) {
-                    const decodedToken = Buffer.from(encodedToken, "base64").toString(
-                        "utf8"
-                    );
+                    const decodedToken = Buffer.from(encodedToken, "base64").toString("utf8");
                     const fetched = JSON.parse(decodedToken);
                     setEmail(fetched.email);
 
-                    console.log("FETCHED EMAIL", fetched.email);
-
-                    const q = query(
-                        collection(db, "paid"),
-                        where("email", "==", fetched.email)
-                    );
+                    const q = query(collection(db, "paid"), where("email", "==", fetched.email));
                     const snapshot = await getDocs(q);
 
                     snapshot.forEach((doc) => {
@@ -50,6 +42,36 @@ const Profile = () => {
         };
 
         fetchData();
+
+        // Confetti effect
+        const duration = 2 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+        const interval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+            });
+            confetti({
+                ...defaults,
+                particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+            });
+        }, 250);
+
+        // Cleanup function
+        return () => clearInterval(interval);
     }, []);
 
     return (
@@ -60,7 +82,6 @@ const Profile = () => {
             pointerColor={"#FFFAA0"}
         >
             <div className="h-screen w-screen flex justify-center items-center overflow-hidden">
-                <Confetti className="absolute left-0 top-0 z-0 size-full" />
                 <Ticket
                     name={name}
                     phoneNumber={pnum}
