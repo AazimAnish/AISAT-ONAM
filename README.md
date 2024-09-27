@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Sadya-Fi 🍽️🎉  
+Bringing technology and tradition together, Sadya-Fi is a Next.js web application designed to streamline ticketing for the traditional Onam Sadhya event. Built with modern technologies such as **Next.js**, **Firebase** for the backend, and **shadcn** for the UI, Sadya-Fi makes organizing cultural events simpler, faster, and more efficient.
 
-## Getting Started
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
 
-First, run the development server:
+## Features 🚀
+- **User Registration:** Students can register for the Onam event seamlessly.
+- **QR Code Generation:** Unique QR codes are generated for each user upon successful registration.
+- **Admin Approval:** Admins can approve or reject students based on their payment status.
+- **QR Code Scanning:** Easily verify attendees on the event day by scanning their QR codes.
+- **Real-time Database:** Firebase integration ensures instant updates.
+- **Interactive Event Schedule:** Displays the event’s timeline to keep participants informed.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Tech Stack 💻
+- **Frontend:** [Next.js](https://nextjs.org/)
+- **Backend & Database:** [Firebase](https://firebase.google.com/)
+- **UI Library:** [shadcn](https://shadcn.dev/)
+- **Authentication:** Firebase Authentication (Email/Password)
+- **QR Code Generation:** [qrcode.react](https://www.npmjs.com/package/qrcode.react)
+- **Deployment:** Vercel
